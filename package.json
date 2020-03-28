@@ -1,0 +1,22 @@
+{
+  "name": "simple-sim-sir",
+  "version": "1.0.0",
+  "description": "SIR model vizualisation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doddydigitaldesign/simple-sim-sir.git"
+  },
+  "author": "Daniel Sonne Lehnberg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/doddydigitaldesign/simple-sim-sir/issues"
+  },
+  "homepage": "https://github.com/doddydigitaldesign/simple-sim-sir#readme",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  }
+}
