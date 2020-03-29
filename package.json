@@ -1,22 +1,39 @@
 {
   "name": "simple-sim-sir",
-  "version": "1.0.0",
-  "description": "SIR model vizualisation",
-  "main": "index.js",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "@types/jest": "^24.9.1",
+    "@types/node": "^12.12.32",
+    "@types/react": "^16.9.27",
+    "@types/react-dom": "^16.9.5",
+    "react": "0.0.0-experimental-aae83a4b9",
+    "react-dom": "0.0.0-experimental-aae83a4b9",
+    "react-scripts": "3.4.1",
+    "typescript": "^3.7.5"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/doddydigitaldesign/simple-sim-sir.git"
+  "eslintConfig": {
+    "extends": "react-app"
   },
-  "author": "Daniel Sonne Lehnberg",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/doddydigitaldesign/simple-sim-sir/issues"
-  },
-  "homepage": "https://github.com/doddydigitaldesign/simple-sim-sir#readme",
-  "devDependencies": {
-    "typescript": "^3.8.3"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
