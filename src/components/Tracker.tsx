@@ -2,39 +2,25 @@ import { config } from "../config";
 import { RelationTypes } from "../types/relations";
 import { Ball } from "./Ball";
 
-const coinFlip = () => Math.random() <= config.transmissionRate;
-const tryInfect = (ball: Ball) => {
-  if (
-    ball.relation === RelationTypes.INFECTIOUS ||
-    ball.relation === RelationTypes.REMOVED
-  ) {
-    return;
-  }
-
-  const hasBadLuck = coinFlip();
-  if (hasBadLuck) {
-    ball.infect();
-  }
-};
-
 interface TrackerConfig {
   ctx: CanvasRenderingContext2D;
   width: number;
   height: number;
   popSize: number;
   timeToRemoved: number;
-
-  handleSetStats: (prev: RelationTypes, next: RelationTypes) => void;
+  transmissionRate: number;
+  stats: { S: number; I: number; R: number };
 }
 
 export class Tracker {
   private width: number;
   private height: number;
   private balls: Ball[];
-  private ctx: CanvasRenderingContext2D;
-  private popSize: number;
-  private timeToRemoved: number;
-  private handleSetStats: (prev: RelationTypes, next: RelationTypes) => void;
+  private ctx: TrackerConfig["ctx"];
+  private popSize: TrackerConfig["popSize"];
+  private timeToRemoved: TrackerConfig["timeToRemoved"];
+  private transmissionRate: TrackerConfig["transmissionRate"];
+  private stats: TrackerConfig["stats"];
 
   constructor({
     ctx,
@@ -42,7 +28,8 @@ export class Tracker {
     height,
     popSize,
     timeToRemoved,
-    handleSetStats
+    transmissionRate,
+    stats
   }: TrackerConfig) {
     this.width = width;
     this.height = height;
@@ -50,28 +37,48 @@ export class Tracker {
     this.ctx = ctx;
     this.popSize = popSize;
     this.timeToRemoved = timeToRemoved;
+    this.transmissionRate = transmissionRate;
+    this.stats = stats;
+
     this.populate();
     this.update();
-    this.handleSetStats = handleSetStats;
+  }
+  coinFlip() {
+    return Math.random() <= this.transmissionRate;
+  }
+  tryInfect(ball: Ball) {
+    if (
+      ball.relation === RelationTypes.INFECTIOUS ||
+      ball.relation === RelationTypes.REMOVED
+    ) {
+      return;
+    }
+
+    if (this.coinFlip() === true) {
+      ball.relation = RelationTypes.INFECTIOUS;
+      setTimeout(() => {
+        ball.relation = RelationTypes.REMOVED;
+      }, this.timeToRemoved * 1000);
+    }
   }
 
   update() {
+    const lengthBalls = this.balls.length;
     this.ctx.clearRect(0, 0, config.canvasWidth, config.canvasHeight);
     this.balls.forEach(ball => {
       ball.update();
     });
 
-    for (let i = 0; i < this.balls.length; i++) {
-      for (let j = 0; j < this.balls.length; j++) {
+    for (let i = 0; i < lengthBalls; i++) {
+      for (let j = 0; j < lengthBalls; j++) {
         if (i !== j) {
-          // console.log(this.isCollided(this.balls[i], this.balls[j]));
           if (this.isCollided(this.balls[i], this.balls[j])) {
             this.balls[i].collide(this.balls[j]);
             if (this.balls[i].relation === RelationTypes.INFECTIOUS) {
-              tryInfect(this.balls[j]);
+              this.tryInfect(this.balls[j]);
             }
             if (this.balls[j].relation === RelationTypes.INFECTIOUS) {
-              tryInfect(this.balls[i]);
+              this.tryInfect(this.balls[i]);
             }
             this.balls[i].update();
             this.balls[j].update();
@@ -102,11 +109,30 @@ export class Tracker {
       const newBall = new Ball({
         ctx: this.ctx,
         index: i,
-        timeToRemoved: this.timeToRemoved,
-        handleSetStats: this.handleSetStats
+        timeToRemoved: this.timeToRemoved
       });
       this.balls.push(newBall);
       this.balls[i].draw();
     }
+  }
+
+  getStats() {
+    let S: number = 0;
+    let I: number = 0;
+    let R: number = 0;
+    const relationTypes = this.balls.map(ball => ball.relation);
+    relationTypes.forEach(type => {
+      if (type === RelationTypes.INFECTIOUS) {
+        I += 1;
+      }
+      if (type === RelationTypes.SUSCEPTIBLE) {
+        S += 1;
+      }
+      if (type === RelationTypes.REMOVED) {
+        R += 1;
+      }
+    });
+    console.log(this.balls.length);
+    return { S: S, I: I, R: R };
   }
 }

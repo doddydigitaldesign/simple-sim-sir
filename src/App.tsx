@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import "./App.css";
 import { Canvas } from "./components/Canvas";
 import { Form } from "./components/Form";
 import Stats from "./components/Stats";
 import { config } from "./config";
-import { RelationTypes } from "./types/relations";
 
 function App() {
   const [populationSize, setPopulationSize] = useState<number>(
@@ -13,10 +12,16 @@ function App() {
   const [timeToRemoved, setTimeToRemoved] = useState<number>(
     config.timeToRemoved
   );
-
-  const [susceptibleCount, setSusceptibleCount] = useState<number>(0);
-  const [infectedCount, setInfectedCount] = useState<number>(0);
+  const [susceptibleCount, setSusceptibleCount] = useState<number>(
+    config.initialPopulationSize - config.initialInfectious
+  );
+  const [infectedCount, setInfectedCount] = useState<number>(
+    config.initialInfectious
+  );
   const [removedCount, setRemovedCount] = useState<number>(0);
+  const [transmissionRate, setTransmissionRate] = useState<number>(
+    config.transmissionRate
+  );
 
   const handleChangePopulationSize = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -24,6 +29,7 @@ function App() {
     const value = parseInt(e.target.value, 10);
     if (typeof value === "number") {
       setPopulationSize(value);
+      setSusceptibleCount(value - removedCount - infectedCount);
     }
   };
 
@@ -36,50 +42,45 @@ function App() {
     }
   };
 
-  const handleUpdateStats = (prev: RelationTypes, next: RelationTypes) => {
-    const { INFECTIOUS, REMOVED, SUSCEPTIBLE } = RelationTypes;
-    switch (next) {
-      case INFECTIOUS:
-        if (prev === REMOVED || prev === INFECTIOUS) {
-          break;
-        }
-        if (prev === SUSCEPTIBLE) {
-          setSusceptibleCount(susceptibleCount - 1);
-          setInfectedCount(infectedCount + 1);
-        }
-        break;
-      case REMOVED:
-        if (prev === SUSCEPTIBLE) {
-          break;
-        }
-        if (prev === INFECTIOUS) {
-          setInfectedCount(infectedCount - 1);
-          setRemovedCount(removedCount + 1);
-        }
-        break;
-      default:
-        break;
+  const handleChangeTransmissionRate = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = parseFloat(e.target.value);
+    if (typeof value === "number") {
+      setTransmissionRate(value);
     }
+  };
+
+  const handleUpdateStats = (stats: { S: number; I: number; R: number }) => {
+    setInfectedCount(stats.I);
+    setRemovedCount(stats.R);
+    setSusceptibleCount(stats.S);
   };
 
   return (
     <div className="App">
       <header className="App-header">
+        <h1 className="h1">SIR Simulering</h1>
         <Form
           populationSize={populationSize}
           setPopulationSize={handleChangePopulationSize}
           timeToRemoved={timeToRemoved}
           setTimeToRemoved={handleChangeTimeToRemoved}
+          transmissionRate={transmissionRate}
+          setTransmissionRate={handleChangeTransmissionRate}
+        />
+
+        <Canvas
+          stats={{ S: susceptibleCount, I: infectedCount, R: removedCount }}
+          transmissionRate={transmissionRate}
+          handleSetStats={useCallback(handleUpdateStats, [handleUpdateStats])}
+          timeToRemoved={timeToRemoved}
+          populationSize={populationSize}
         />
         <Stats
           infected={infectedCount}
           susceptible={susceptibleCount}
           removed={removedCount}
-        />
-        <Canvas
-          handleSetStats={handleUpdateStats}
-          timeToRemoved={timeToRemoved}
-          populationSize={populationSize}
         />
       </header>
     </div>

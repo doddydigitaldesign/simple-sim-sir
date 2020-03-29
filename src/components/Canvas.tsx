@@ -1,33 +1,45 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { config } from "../config";
-import { RelationTypes } from "../types/relations";
 import { Tracker } from "./Tracker";
 
 interface Props {
   populationSize: number;
   timeToRemoved: number;
-  handleSetStats: (prev: RelationTypes, next: RelationTypes) => void;
+  transmissionRate: number;
+  handleSetStats: (stats: { S: number; I: number; R: number }) => void;
+  stats: { S: number; I: number; R: number };
 }
 
 export const Canvas = (props: Props) => {
-  const { handleSetStats } = props;
   const ref = useRef<HTMLCanvasElement>(null);
-  useLayoutEffect(() => {
+
+  useEffect(() => {
     if (ref.current) {
       const ctx = ref.current.getContext("2d");
       ctx?.clearRect(0, 0, config.canvasWidth, config.canvasHeight);
       if (ctx) {
-        new Tracker({
+        const tracker = new Tracker({
           ctx,
           height: config.canvasHeight,
           width: config.canvasWidth,
           popSize: props.populationSize,
           timeToRemoved: props.timeToRemoved,
-          handleSetStats: handleSetStats
+          transmissionRate: props.transmissionRate,
+          stats: props.stats
         });
+        const interval = setInterval(() => {
+          const stats = tracker.getStats();
+          props.handleSetStats({ ...stats });
+        }, 1000);
+        if (interval) {
+          return () => {
+            clearInterval();
+          };
+        }
       }
     }
-  }, [handleSetStats, props.populationSize, props.timeToRemoved]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.populationSize, props.timeToRemoved]);
   return (
     <canvas
       ref={ref}

@@ -28,7 +28,6 @@ interface BallConfig {
   ctx: CanvasRenderingContext2D;
   index: number;
   timeToRemoved: number;
-  handleSetStats: (prev: RelationTypes, next: RelationTypes) => void;
 }
 
 export class Ball {
@@ -37,11 +36,9 @@ export class Ball {
   public relation: RelationTypes;
   public radius: number;
   private count: number;
-  private infected: { time: number; isInfected: boolean };
   private timeToRemoved: number;
   ctx: CanvasRenderingContext2D;
-  handleSetStats: (prev: RelationTypes, next: RelationTypes) => void;
-  constructor({ ctx, index, timeToRemoved, handleSetStats }: BallConfig) {
+  constructor({ ctx, index, timeToRemoved }: BallConfig) {
     this.ctx = ctx;
     this.count = index + 1;
     this.position = new Vector(
@@ -57,12 +54,7 @@ export class Ball {
         ? RelationTypes.INFECTIOUS
         : RelationTypes.SUSCEPTIBLE;
     this.radius = config.ballRadius;
-    this.infected = {
-      isInfected: this.relation === RelationTypes.INFECTIOUS,
-      time: this.relation === RelationTypes.INFECTIOUS ? performance.now() : 0
-    };
     this.timeToRemoved = timeToRemoved;
-    this.handleSetStats = handleSetStats;
   }
 
   draw() {
@@ -108,16 +100,8 @@ export class Ball {
 
   infect() {
     this.relation = RelationTypes.INFECTIOUS;
-    this.infected = {
-      isInfected: true,
-      time: performance.now()
-    };
     setTimeout(() => {
-      this.infected = { isInfected: false, time: 0 };
       this.relation = RelationTypes.REMOVED;
-      if (typeof this.handleSetStats === "function") {
-        this.handleSetStats(RelationTypes.INFECTIOUS, RelationTypes.REMOVED);
-      }
     }, this.timeToRemoved * 1000);
   }
 
