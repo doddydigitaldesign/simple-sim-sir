@@ -23,6 +23,8 @@ export const Form = (props: Props) => {
           <input
             className={"form-control"}
             type="number"
+            min={0}
+            max={1000}
             value={props.populationSize}
             onChange={props.setPopulationSize}
             name="population-size"
@@ -43,6 +45,8 @@ export const Form = (props: Props) => {
             className={"form-control"}
             type="number"
             value={props.timeToRemoved}
+            min={0.01}
+            max={100}
             onChange={props.setTimeToRemoved}
             name="time-to-removed-input"
             id="time-to-removed-input"

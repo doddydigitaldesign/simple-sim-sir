@@ -4,7 +4,7 @@ export const config = {
   ballRadius: 5,
   maxVelocity: 1,
   initialInfectious: 10,
-  initialPopulationSize: 1000,
+  initialPopulationSize: 100,
   transmissionRate: 0.02,
   timeToRemoved: 10
 };

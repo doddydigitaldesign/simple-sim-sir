@@ -83,6 +83,18 @@ function App() {
           removed={removedCount}
         />
       </header>
+      <footer className="jumbotron jumbotron-fluid  bg-dark">
+        <div className="container">
+          <h1 className="display-4">SIR simulering</h1>
+          <p className="lead">av Daniel Sonne Lehnberg</p>
+          <p>
+            GitHub repository:{" "}
+            <a href="https://doddydigitaldesign.github.io/simple-sim-sir/">
+              https://doddydigitaldesign.github.io/simple-sim-sir/
+            </a>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

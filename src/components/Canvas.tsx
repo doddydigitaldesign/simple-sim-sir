@@ -39,7 +39,7 @@ export const Canvas = (props: Props) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.populationSize, props.timeToRemoved]);
+  }, [props.transmissionRate, props.populationSize, props.timeToRemoved]);
   return (
     <canvas
       ref={ref}
