@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/simple-sim-sir/static/css/main.7983955d.chunk.css",
-    "main.js": "/simple-sim-sir/static/js/main.4da2062f.chunk.js",
-    "main.js.map": "/simple-sim-sir/static/js/main.4da2062f.chunk.js.map",
+    "main.css": "/simple-sim-sir/static/css/main.c8ba2a46.chunk.css",
+    "main.js": "/simple-sim-sir/static/js/main.6335062c.chunk.js",
+    "main.js.map": "/simple-sim-sir/static/js/main.6335062c.chunk.js.map",
     "runtime-main.js": "/simple-sim-sir/static/js/runtime-main.40985747.js",
     "runtime-main.js.map": "/simple-sim-sir/static/js/runtime-main.40985747.js.map",
     "static/js/2.1d489beb.chunk.js": "/simple-sim-sir/static/js/2.1d489beb.chunk.js",
     "static/js/2.1d489beb.chunk.js.map": "/simple-sim-sir/static/js/2.1d489beb.chunk.js.map",
     "index.html": "/simple-sim-sir/index.html",
-    "precache-manifest.6e657f0c8336fa7426cad38ac63e267b.js": "/simple-sim-sir/precache-manifest.6e657f0c8336fa7426cad38ac63e267b.js",
+    "precache-manifest.34f2fc0f545786d10829455912251dc5.js": "/simple-sim-sir/precache-manifest.34f2fc0f545786d10829455912251dc5.js",
     "service-worker.js": "/simple-sim-sir/service-worker.js",
-    "static/css/main.7983955d.chunk.css.map": "/simple-sim-sir/static/css/main.7983955d.chunk.css.map",
+    "static/css/main.c8ba2a46.chunk.css.map": "/simple-sim-sir/static/css/main.c8ba2a46.chunk.css.map",
     "static/js/2.1d489beb.chunk.js.LICENSE.txt": "/simple-sim-sir/static/js/2.1d489beb.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.40985747.js",
     "static/js/2.1d489beb.chunk.js",
-    "static/css/main.7983955d.chunk.css",
-    "static/js/main.4da2062f.chunk.js"
+    "static/css/main.c8ba2a46.chunk.css",
+    "static/js/main.6335062c.chunk.js"
   ]
 }
