@@ -17,7 +17,7 @@ export const Form = (props: Props) => {
           <label htmlFor="popsize-input" aria-describedby="popsizeHelp">
             Antal individer
           </label>
-          <small id="popsizeHelp" className="form-text text-muted">
+          <small id="popsizeHelp" className="form-text">
             Se hur resultatet påverkas med olika antal individer i området.
           </small>
           <input
@@ -36,10 +36,11 @@ export const Form = (props: Props) => {
             htmlFor="time-to-removed-input"
             aria-describedby="timeToRemovedHelp"
           >
-            Tid till frisk
+            Smittsamhetstid
           </label>
-          <small id="timeToRemovedHelp" className="form-text text-muted">
-            Se hur resultatet påverkas med olika längder på sjukdomen.
+          <small id="timeToRemovedHelp" className="form-text">
+            Se hur resultatet påverkas om individer är smittsamma längre eller
+            kortare perioder.
           </small>
           <input
             className={"form-control"}
@@ -57,10 +58,10 @@ export const Form = (props: Props) => {
             htmlFor="transmission-rate-input"
             aria-describedby="timeToRemovedHelp"
           >
-            Smittrisk
+            Virulens
           </label>
-          <small id="transmissionRateHelp" className="form-text text-muted">
-            Se hur resultatet påverkas om smittrisken ändras.
+          <small id="transmissionRateHelp" className="form-text">
+            Se hur resultatet påverkas om risken att smittan sprids ändras.
           </small>
           <input
             className={"form-control"}

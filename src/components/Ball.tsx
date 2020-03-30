@@ -3,6 +3,7 @@ import { RelationTypes } from "../types/relations";
 import { Vector } from "../types/vector";
 
 const rand = (max: number) => 1 + Math.floor(Math.random() * max);
+
 const getBallColor = (relation: RelationTypes) => {
   switch (relation) {
     case RelationTypes.INFECTIOUS:
@@ -27,7 +28,6 @@ const getShadowColor = (relation: RelationTypes) => {
 interface BallConfig {
   ctx: CanvasRenderingContext2D;
   index: number;
-  timeToRemoved: number;
 }
 
 export class Ball {
@@ -36,9 +36,8 @@ export class Ball {
   public relation: RelationTypes;
   public radius: number;
   private count: number;
-  private timeToRemoved: number;
   ctx: CanvasRenderingContext2D;
-  constructor({ ctx, index, timeToRemoved }: BallConfig) {
+  constructor({ ctx, index }: BallConfig) {
     this.ctx = ctx;
     this.count = index + 1;
     this.position = new Vector(
@@ -54,7 +53,6 @@ export class Ball {
         ? RelationTypes.INFECTIOUS
         : RelationTypes.SUSCEPTIBLE;
     this.radius = config.ballRadius;
-    this.timeToRemoved = timeToRemoved;
   }
 
   draw() {
@@ -70,21 +68,21 @@ export class Ball {
     const path = new Path2D();
     path.moveTo(220, 60);
     path.arc(170, 60, config.ballRadius, 0, 2 * Math.PI);
-    ctx.scale(0.5, 0.5);
+    ctx.scale(0.1, 0.1);
     ctx.fill(path);
     ctx.restore();
   }
 
   translate() {
     if (
-      this.position.x <= this.radius ||
-      this.position.x >= config.canvasWidth - this.radius
+      this.position.x <= this.radius * 2 ||
+      this.position.x >= config.canvasWidth - this.radius * 2
     ) {
       this.velocity.x = -this.velocity.x;
     }
     if (
-      this.position.y <= this.radius ||
-      this.position.y >= config.canvasHeight - this.radius
+      this.position.y <= this.radius * 2 ||
+      this.position.y >= config.canvasHeight - this.radius * 2
     ) {
       this.velocity.y = -this.velocity.y;
     }
@@ -96,13 +94,6 @@ export class Ball {
   update() {
     this.translate();
     this.draw();
-  }
-
-  infect() {
-    this.relation = RelationTypes.INFECTIOUS;
-    setTimeout(() => {
-      this.relation = RelationTypes.REMOVED;
-    }, this.timeToRemoved * 1000);
   }
 
   collide(ball: Ball) {

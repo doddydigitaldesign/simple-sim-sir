@@ -23,17 +23,17 @@ const Stats = (props: Props) => {
         <ListItem
           textColor={"light"}
           bgColor={"bg-primary"}
-          text={"Mottagliga: " + props.susceptible}
+          text={"S, antal mottagliga: " + props.susceptible}
         />
         <ListItem
           textColor={"light"}
           bgColor={"bg-danger"}
-          text={"Infekterade: " + props.infected}
+          text={"I, antal infekterade: " + props.infected}
         />
         <ListItem
           textColor={"dark"}
           bgColor={"bg-light"}
-          text={"Tillfrisknade: " + props.removed}
+          text={"R, antal immuna eller döda: " + props.removed}
         />
       </ul>
     </>

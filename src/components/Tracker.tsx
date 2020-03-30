@@ -108,8 +108,7 @@ export class Tracker {
     for (let i = 0; i < this.popSize; i++) {
       const newBall = new Ball({
         ctx: this.ctx,
-        index: i,
-        timeToRemoved: this.timeToRemoved
+        index: i
       });
       this.balls.push(newBall);
       this.balls[i].draw();
