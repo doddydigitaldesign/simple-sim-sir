@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { config } from "../config";
+import { initComputePositions } from "../workers/computePositions";
 import { Tracker } from "./Tracker";
 
 interface Props {
@@ -15,6 +16,9 @@ export const Canvas = (props: Props) => {
 
   useEffect(() => {
     if (ref.current) {
+      // init worker
+      initComputePositions();
+      // init canvas context
       const ctx = ref.current.getContext("2d");
       ctx?.clearRect(0, 0, config.canvasWidth, config.canvasHeight);
       if (ctx) {
