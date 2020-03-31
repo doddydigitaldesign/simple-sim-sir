@@ -1,4 +1,4 @@
-import Matter, { Gravity } from "matter-js";
+import Matter, { Engine, Gravity } from "matter-js";
 import React from "react";
 import { config } from "../config";
 import { RelationTypes } from "../types/relations";
@@ -22,7 +22,8 @@ interface State {
   S: number;
   I: number;
   R: number;
-  render?: any;
+  render?: Matter.Render;
+  engine?: Matter.Engine;
 }
 
 export class Scene extends React.Component<Props, State> {
@@ -181,8 +182,13 @@ export class Scene extends React.Component<Props, State> {
     Engine.run(engine);
 
     Render.run(render);
-    this.setState({ render });
-    props.handleSetStats({ ...this.state });
+    this.setState({ render, engine });
+  }
+
+  componentWillUnmount() {
+    if (this.state.engine) {
+      Engine.clear(this.state.engine);
+    }
   }
 
   render() {

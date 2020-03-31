@@ -3,7 +3,6 @@ import "./App.css";
 import { Footer } from "./components/Footer";
 import { Form } from "./components/Form";
 import { Scene } from "./components/Scene";
-import Stats from "./components/Stats";
 import { config } from "./config";
 
 function App() {
@@ -70,6 +69,8 @@ function App() {
           transmissionRate={transmissionRate}
           setTransmissionRate={handleChangeTransmissionRate}
         />
+      </header>
+      <main>
         <Scene
           stats={{ S: susceptibleCount, I: infectedCount, R: removedCount }}
           transmissionRate={transmissionRate}
@@ -77,19 +78,7 @@ function App() {
           timeToRemoved={timeToRemoved}
           populationSize={populationSize}
         />
-        {/* <Canvas
-          stats={{ S: susceptibleCount, I: infectedCount, R: removedCount }}
-          transmissionRate={transmissionRate}
-          handleSetStats={useCallback(handleUpdateStats, [handleUpdateStats])}
-          timeToRemoved={timeToRemoved}
-          populationSize={populationSize}
-        /> */}
-        <Stats
-          infected={infectedCount}
-          susceptible={susceptibleCount}
-          removed={removedCount}
-        />
-      </header>
+      </main>
       <Footer />
     </div>
   );
