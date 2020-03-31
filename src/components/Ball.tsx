@@ -1,29 +1,8 @@
 import { config } from "../config";
 import { RelationTypes } from "../types/relations";
 import { Vector } from "../types/vector";
-
-const rand = (max: number) => 1 + Math.floor(Math.random() * max);
-
-const getBallColor = (relation: RelationTypes) => {
-  switch (relation) {
-    case RelationTypes.INFECTIOUS:
-      return "red";
-    case RelationTypes.REMOVED:
-      return "white";
-    default:
-      return "dodgerblue";
-  }
-};
-const getShadowColor = (relation: RelationTypes) => {
-  switch (relation) {
-    case RelationTypes.INFECTIOUS:
-      return "yellow";
-    case RelationTypes.REMOVED:
-      return "limegreen";
-    default:
-      return "deepskyblue";
-  }
-};
+import { getBallColor, getShadowColor } from "../utils/colors";
+import { rand } from "../utils/rng";
 
 interface BallConfig {
   ctx: CanvasRenderingContext2D;

@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
 import "./App.css";
-import { Canvas } from "./components/Canvas";
 import { Footer } from "./components/Footer";
 import { Form } from "./components/Form";
+import { Scene } from "./components/Scene";
 import Stats from "./components/Stats";
 import { config } from "./config";
 
@@ -70,14 +70,20 @@ function App() {
           transmissionRate={transmissionRate}
           setTransmissionRate={handleChangeTransmissionRate}
         />
-
-        <Canvas
+        <Scene
           stats={{ S: susceptibleCount, I: infectedCount, R: removedCount }}
           transmissionRate={transmissionRate}
           handleSetStats={useCallback(handleUpdateStats, [handleUpdateStats])}
           timeToRemoved={timeToRemoved}
           populationSize={populationSize}
         />
+        {/* <Canvas
+          stats={{ S: susceptibleCount, I: infectedCount, R: removedCount }}
+          transmissionRate={transmissionRate}
+          handleSetStats={useCallback(handleUpdateStats, [handleUpdateStats])}
+          timeToRemoved={timeToRemoved}
+          populationSize={populationSize}
+        /> */}
         <Stats
           infected={infectedCount}
           susceptible={susceptibleCount}
