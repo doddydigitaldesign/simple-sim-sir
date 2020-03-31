@@ -153,6 +153,9 @@ export class Scene extends React.Component<Props, State> {
               bodyB.render.fillStyle === getBallColor(RelationTypes.SUSCEPTIBLE)
             ) {
               bodyA.render.fillStyle = getBallColor(RelationTypes.INFECTIOUS);
+              if (Date.now() - pair.timeUpdated >= this.props.timeToRemoved) {
+                bodyA.render.fillStyle = getBallColor(RelationTypes.REMOVED);
+              }
             }
           }
           if (
@@ -163,6 +166,12 @@ export class Scene extends React.Component<Props, State> {
               pair.bodyB.render.fillStyle = getBallColor(
                 RelationTypes.INFECTIOUS
               );
+              if (
+                Date.now() - pair.timeUpdated >=
+                this.props.timeToRemoved * 1000
+              ) {
+                bodyB.render.fillStyle = getBallColor(RelationTypes.REMOVED);
+              }
             }
           }
         }
