@@ -133,9 +133,7 @@ export class Scene extends React.Component<Props, State> {
       } as Matter.IMouseConstraintDefinition);
 
     World.add(engine.world, mouseConstraint);
-    const setTimer = (callback: (args: any) => void, n: number) => {
-      setTimeout(callback, n);
-    };
+
     Events.on(engine, "collisionStart", event => {
       var pairs = event.pairs;
       // change object colours to indicate spread of infection
