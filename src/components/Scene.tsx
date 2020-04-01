@@ -15,13 +15,13 @@ interface Props {
   populationSize: number;
   timeToRemoved: number;
   transmissionRate: number;
-  handleSetStats: (stats: { S: number; I: number; R: number }) => void;
-  stats: { S: number; I: number; R: number };
+  initialInfected: number;
 }
 interface State {
   S: number;
   I: number;
   R: number;
+  ballStates: { [key: number]: { relation: RelationTypes; timeStamp: number } };
   render?: Matter.Render;
   engine?: Matter.Engine;
 }
@@ -29,11 +29,17 @@ interface State {
 export class Scene extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = props.stats;
+    this.state = {
+      I: props.initialInfected,
+      R: 0,
+      S: props.populationSize - props.initialInfected,
+      ballStates: {},
+      engine: undefined,
+      render: undefined
+    };
   }
 
   componentDidMount() {
-    const props = this.props;
     const Engine = Matter.Engine,
       Render = Matter.Render,
       World = Matter.World,
@@ -48,7 +54,8 @@ export class Scene extends React.Component<Props, State> {
       // positionIterations: 20
     });
     engine.world.gravity = gravity;
-    engine.timing.timeScale = 0.1;
+    engine.timing.timeScale = 1;
+    engine.velocityIterations = 1;
     const render = Render.create({
       element: this.refs.scene as HTMLElement,
       engine: engine,
@@ -139,39 +146,136 @@ export class Scene extends React.Component<Props, State> {
       // change object colours to indicate spread of infection
       for (var i = 0; i < pairs.length; i++) {
         var pair = pairs[i];
+        const timeCreated = pair.timeCreated;
+        const timeStamp = pair.timeUpdated;
         const bodyA = pair.bodyA;
         const bodyB = pair.bodyB;
+        /**
+         * Check if bodyA was infected from the start
+         */
         if (
-          bodyA.render.fillStyle === getBallColor(RelationTypes.INFECTIOUS) ||
+          bodyA.render.fillStyle === getBallColor(RelationTypes.INFECTIOUS) &&
+          !this.state.ballStates[bodyA.id]
+        ) {
+          this.setState(prevState => ({
+            ...prevState,
+            ballStates: {
+              ...prevState.ballStates,
+              [bodyA.id]: {
+                relation: RelationTypes.INFECTIOUS,
+                timeStamp: timeCreated
+              }
+            }
+          }));
+        }
+        /**
+         * Check if bodyB was infected from the start
+         */
+        if (
+          bodyB.render.fillStyle === getBallColor(RelationTypes.INFECTIOUS) &&
+          !this.state.ballStates[bodyB.id]
+        ) {
+          this.setState(prevState => ({
+            ...prevState,
+            ballStates: {
+              ...prevState.ballStates,
+              [bodyB.id]: {
+                relation: RelationTypes.INFECTIOUS,
+                timeStamp: timeCreated
+              }
+            }
+          }));
+        }
+        /**
+         * Check if bodyA should be removed
+         */
+        if (
+          bodyA.render.fillStyle === getBallColor(RelationTypes.INFECTIOUS) &&
+          pair.timeUpdated - this.state.ballStates[bodyA.id]?.timeStamp >=
+            this.props.timeToRemoved
+        ) {
+          this.setState(prevState => ({
+            ...prevState,
+            I: prevState.I - 1,
+            R: prevState.R + 1,
+            ballStates: {
+              ...prevState.ballStates,
+              [bodyA.id]: {
+                relation: RelationTypes.REMOVED,
+                timeStamp
+              }
+            }
+          }));
+          bodyA.render.fillStyle = getBallColor(RelationTypes.REMOVED);
+        }
+        /**
+         * Check if bodyB should be removed
+         */
+        if (
+          bodyB.render.fillStyle === getBallColor(RelationTypes.INFECTIOUS) &&
+          pair.timeUpdated - this.state.ballStates[bodyB.id]?.timeStamp >=
+            this.props.timeToRemoved
+        ) {
+          this.setState(prevState => ({
+            ...prevState,
+            I: prevState.I - 1,
+            R: prevState.R + 1,
+            ballStates: {
+              ...prevState.ballStates,
+              [bodyB.id]: {
+                relation: RelationTypes.REMOVED,
+                timeStamp
+              }
+            }
+          }));
+          bodyB.render.fillStyle = getBallColor(RelationTypes.REMOVED);
+        }
+        /**
+         * Check if bodyA should be infected
+         */
+        if (
+          bodyA.render.fillStyle === getBallColor(RelationTypes.SUSCEPTIBLE) &&
           bodyB.render.fillStyle === getBallColor(RelationTypes.INFECTIOUS)
         ) {
-          if (
-            bodyA.render.fillStyle === getBallColor(RelationTypes.SUSCEPTIBLE)
-          ) {
-            if (
-              bodyB.render.fillStyle === getBallColor(RelationTypes.SUSCEPTIBLE)
-            ) {
+          if (bernoulliEvent(this.props.transmissionRate)) {
+            if (bernoulliEvent(1 - this.props.transmissionRate)) {
+              this.setState(prevState => ({
+                ...prevState,
+                S: prevState.S - 1,
+                I: prevState.I + 1,
+                ballStates: {
+                  ...prevState.ballStates,
+                  [bodyA.id]: {
+                    relation: RelationTypes.INFECTIOUS,
+                    timeStamp
+                  }
+                }
+              }));
               bodyA.render.fillStyle = getBallColor(RelationTypes.INFECTIOUS);
-              if (Date.now() - pair.timeUpdated >= this.props.timeToRemoved) {
-                bodyA.render.fillStyle = getBallColor(RelationTypes.REMOVED);
-              }
             }
           }
-          if (
-            pair.bodyB.render.fillStyle ===
-            getBallColor(RelationTypes.SUSCEPTIBLE)
-          ) {
-            if (!bernoulliEvent(props.transmissionRate)) {
-              pair.bodyB.render.fillStyle = getBallColor(
-                RelationTypes.INFECTIOUS
-              );
-              if (
-                Date.now() - pair.timeUpdated >=
-                this.props.timeToRemoved * 1000
-              ) {
-                bodyB.render.fillStyle = getBallColor(RelationTypes.REMOVED);
+        }
+        /**
+         * Check if bodyB should be infected
+         */
+        if (
+          bodyB.render.fillStyle === getBallColor(RelationTypes.SUSCEPTIBLE) &&
+          bodyA.render.fillStyle === getBallColor(RelationTypes.INFECTIOUS)
+        ) {
+          if (bernoulliEvent(1 - this.props.transmissionRate)) {
+            this.setState(prevState => ({
+              ...prevState,
+              S: prevState.S - 1,
+              I: prevState.I + 1,
+              ballStates: {
+                ...prevState.ballStates,
+                [bodyB.id]: {
+                  relation: RelationTypes.INFECTIOUS,
+                  timeStamp
+                }
               }
-            }
+            }));
+            bodyB.render.fillStyle = getBallColor(RelationTypes.INFECTIOUS);
           }
         }
       }
@@ -181,6 +285,20 @@ export class Scene extends React.Component<Props, State> {
 
     Render.run(render);
     this.setState({ render, engine });
+  }
+
+  shouldComponentUpdate(
+    nextProps: Readonly<Props>,
+    nextState: Readonly<State>,
+    nextContext: any
+  ) {
+    const newPopSize = nextProps.populationSize === this.props.populationSize;
+    const newTimeToRemoved =
+      nextProps.timeToRemoved === this.props.timeToRemoved;
+    const newTransRate =
+      nextProps.transmissionRate === this.props.transmissionRate;
+
+    return [newPopSize, newTimeToRemoved, newTransRate].every(x => x === false);
   }
 
   componentWillUnmount() {
