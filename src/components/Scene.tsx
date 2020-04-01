@@ -5,10 +5,7 @@ import { RelationTypes } from "../types/relations";
 import { getBallColor } from "../utils/colors";
 import { bernoulliEvent, randBetween } from "../utils/rng";
 
-// TODO: Add relation checks on collisionStart event: https://github.com/liabru/matter-js/blob/master/examples/events.js
 // https://codesandbox.io/s/matterjs-4zm7j
-// https://medium.com/better-programming/how-to-use-matter-js-in-a-react-app-bbd43b71efcc
-// https://codersblock.com/blog/javascript-physics-with-matter-js/
 // https://brm.io/matter-js/docs/classes/Events.html
 // https://brm.io/matter-js/demo/#ballPool
 interface Props {
@@ -27,6 +24,7 @@ interface State {
 }
 
 export class Scene extends React.Component<Props, State> {
+  customRef: React.RefObject<HTMLDivElement>;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -37,6 +35,7 @@ export class Scene extends React.Component<Props, State> {
       engine: undefined,
       render: undefined
     };
+    this.customRef = React.createRef();
   }
 
   componentDidMount() {
@@ -48,23 +47,50 @@ export class Scene extends React.Component<Props, State> {
       Mouse = Matter.Mouse,
       MouseConstraint = Matter.MouseConstraint;
 
-    const gravity: Gravity = { scale: 0, x: 0, y: 0 };
-
     const engine = Engine.create({
-      // positionIterations: 20
+      positionIterations: 1,
+      velocityIterations: 1
     });
+    const gravity: Gravity = { scale: 1, x: config.gravity, y: config.gravity };
+    const timing = { timeScale: config.timeScale, timestamp: 0 };
     engine.world.gravity = gravity;
-    engine.timing.timeScale = 1;
-    engine.velocityIterations = 1;
+    engine.timing = timing;
+    // engine.enableSleeping = true;
     const render = Render.create({
-      element: this.refs.scene as HTMLElement,
-      engine: engine,
+      element: this.customRef.current as HTMLElement,
+      engine,
       options: {
         width: config.canvasWidth,
         height: config.canvasHeight,
         wireframes: false
       }
     });
+
+    World.add(engine.world, [
+      // walls
+      Bodies.rectangle(config.canvasWidth / 2, 0, config.canvasWidth, 1, {
+        isStatic: true
+      }),
+      Bodies.rectangle(
+        config.canvasWidth / 2,
+        config.canvasHeight,
+        config.canvasWidth,
+        1,
+        { isStatic: true }
+      ),
+      Bodies.rectangle(0, config.canvasHeight / 2, 1, config.canvasHeight, {
+        isStatic: true
+      }),
+      Bodies.rectangle(
+        config.canvasWidth,
+        config.canvasHeight / 2,
+        1,
+        config.canvasHeight,
+        {
+          isStatic: true
+        }
+      )
+    ]);
     const balls = [...Array(this.props.populationSize).keys()].map(ball => {
       let fillStyle = getBallColor(RelationTypes.SUSCEPTIBLE);
       if (ball <= config.initialInfectious) {
@@ -74,9 +100,9 @@ export class Scene extends React.Component<Props, State> {
         frictionStatic: 0,
         slop: 0,
         frictionAir: 0,
-        restitution: 1.1,
+        restitution: 1,
         friction: 0,
-        density: 1,
+        density: 10,
         inertia: 0,
         speed: 1,
         force: {
@@ -93,38 +119,6 @@ export class Scene extends React.Component<Props, State> {
       );
       return ballN;
     });
-    World.add(engine.world, [
-      // walls
-      Bodies.rectangle(config.canvasWidth / 2, 0, config.canvasWidth, 50, {
-        isStatic: true,
-        restitution: 2,
-        mass: 1000
-      }),
-      Bodies.rectangle(
-        config.canvasWidth / 2,
-        config.canvasHeight,
-        config.canvasWidth,
-        50,
-        { isStatic: true, restitution: 2, mass: 1000 }
-      ),
-      Bodies.rectangle(0, config.canvasHeight / 2, 50, config.canvasHeight, {
-        isStatic: true,
-        restitution: 2,
-        mass: 1000
-      }),
-      Bodies.rectangle(
-        config.canvasWidth,
-        config.canvasHeight / 2,
-        50,
-        config.canvasHeight,
-        {
-          isStatic: true,
-          restitution: 2,
-          mass: 1000
-        }
-      )
-    ]);
-
     World.add(engine.world, [...balls]);
 
     // add mouse control
@@ -287,20 +281,6 @@ export class Scene extends React.Component<Props, State> {
     this.setState({ render, engine });
   }
 
-  shouldComponentUpdate(
-    nextProps: Readonly<Props>,
-    nextState: Readonly<State>,
-    nextContext: any
-  ) {
-    const newPopSize = nextProps.populationSize === this.props.populationSize;
-    const newTimeToRemoved =
-      nextProps.timeToRemoved === this.props.timeToRemoved;
-    const newTransRate =
-      nextProps.transmissionRate === this.props.transmissionRate;
-
-    return [newPopSize, newTimeToRemoved, newTransRate].every(x => x === false);
-  }
-
   componentWillUnmount() {
     if (this.state.engine) {
       Engine.clear(this.state.engine);
@@ -308,6 +288,18 @@ export class Scene extends React.Component<Props, State> {
   }
 
   render() {
-    return <div ref="scene" />;
+    return (
+      <div className="container-fluid jumbotron bg-dark">
+        <div className="row text-center justify-content-center">
+          <p className="lead">
+            Susceptible: {this.state.S} | Infected: {this.state.I} | Removed:{" "}
+            {this.state.R}
+          </p>
+        </div>
+        <div className="row">
+          <div ref={this.customRef} />
+        </div>
+      </div>
+    );
   }
 }

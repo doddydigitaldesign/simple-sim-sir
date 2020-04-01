@@ -2,8 +2,13 @@ import React from "react";
 
 export const Header = () => {
   return (
-    <header className="App-header">
-      <h1 className="h1">Simulering av kontaktsmitta</h1>
-    </header>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a
+        className="navbar-brand"
+        href="https://doddydigitaldesign.github.io/simple-sim-sir/"
+      >
+        Contact Disease Mechanics
+      </a>
+    </nav>
   );
 };
