@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/simple-sim-sir/static/css/main.54a2121e.chunk.css",
-    "main.js": "/simple-sim-sir/static/js/main.18ddfcf3.chunk.js",
-    "main.js.map": "/simple-sim-sir/static/js/main.18ddfcf3.chunk.js.map",
+    "main.js": "/simple-sim-sir/static/js/main.582d327c.chunk.js",
+    "main.js.map": "/simple-sim-sir/static/js/main.582d327c.chunk.js.map",
     "runtime-main.js": "/simple-sim-sir/static/js/runtime-main.40985747.js",
     "runtime-main.js.map": "/simple-sim-sir/static/js/runtime-main.40985747.js.map",
     "static/js/2.b9015f3e.chunk.js": "/simple-sim-sir/static/js/2.b9015f3e.chunk.js",
     "static/js/2.b9015f3e.chunk.js.map": "/simple-sim-sir/static/js/2.b9015f3e.chunk.js.map",
     "index.html": "/simple-sim-sir/index.html",
-    "precache-manifest.94468d2bd8fa45c6652c2dc7f0df0e74.js": "/simple-sim-sir/precache-manifest.94468d2bd8fa45c6652c2dc7f0df0e74.js",
+    "precache-manifest.7a1ccc336c039aa6d69522790278a39f.js": "/simple-sim-sir/precache-manifest.7a1ccc336c039aa6d69522790278a39f.js",
     "service-worker.js": "/simple-sim-sir/service-worker.js",
     "static/css/main.54a2121e.chunk.css.map": "/simple-sim-sir/static/css/main.54a2121e.chunk.css.map",
     "static/js/2.b9015f3e.chunk.js.LICENSE.txt": "/simple-sim-sir/static/js/2.b9015f3e.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.40985747.js",
     "static/js/2.b9015f3e.chunk.js",
     "static/css/main.54a2121e.chunk.css",
-    "static/js/main.18ddfcf3.chunk.js"
+    "static/js/main.582d327c.chunk.js"
   ]
 }
