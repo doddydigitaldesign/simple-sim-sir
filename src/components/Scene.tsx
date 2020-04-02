@@ -191,8 +191,8 @@ export class Scene extends React.Component<Props, State> {
         ) {
           this.setState(prevState => ({
             ...prevState,
-            I: prevState.I - 1,
-            R: prevState.R + 1,
+            I: prevState.I === 0 ? 0 : prevState.I - 1,
+            R: prevState.I === 0 ? prevState.R : prevState.R + 1,
             ballStates: {
               ...prevState.ballStates,
               [bodyA.id]: {
@@ -213,8 +213,8 @@ export class Scene extends React.Component<Props, State> {
         ) {
           this.setState(prevState => ({
             ...prevState,
-            I: prevState.I - 1,
-            R: prevState.R + 1,
+            I: prevState.I === 0 ? 0 : prevState.I - 1,
+            R: prevState.I === 0 ? prevState.R : prevState.R + 1,
             ballStates: {
               ...prevState.ballStates,
               [bodyB.id]: {
@@ -236,7 +236,7 @@ export class Scene extends React.Component<Props, State> {
             if (bernoulliEvent(1 - this.props.transmissionRate)) {
               this.setState(prevState => ({
                 ...prevState,
-                S: prevState.S - 1,
+                S: prevState.S === 0 ? 0 : prevState.S - 1,
                 I: prevState.I + 1,
                 ballStates: {
                   ...prevState.ballStates,
@@ -260,7 +260,7 @@ export class Scene extends React.Component<Props, State> {
           if (bernoulliEvent(1 - this.props.transmissionRate)) {
             this.setState(prevState => ({
               ...prevState,
-              S: prevState.S - 1,
+              S: prevState.S === 0 ? 0 : prevState.S - 1,
               I: prevState.I + 1,
               ballStates: {
                 ...prevState.ballStates,
