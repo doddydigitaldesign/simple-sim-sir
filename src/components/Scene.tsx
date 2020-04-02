@@ -9,6 +9,7 @@ import { bernoulliEvent, randBetween } from "../utils/rng";
 // https://brm.io/matter-js/docs/classes/Events.html
 // https://brm.io/matter-js/demo/#ballPool
 interface Props {
+  setRunning: any;
   populationSize: number;
   timeToRemoved: number;
   transmissionRate: number;
@@ -284,6 +285,9 @@ export class Scene extends React.Component<Props, State> {
   componentWillUnmount() {
     if (this.state.engine) {
       Engine.clear(this.state.engine);
+    }
+    if (this.state.I === 0) {
+      this.props.setRunning(false);
     }
   }
 

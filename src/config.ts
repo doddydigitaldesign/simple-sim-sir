@@ -6,7 +6,7 @@ export const config = {
   initialInfectious: 50,
   initialPopulationSize: 1000,
   transmissionRate: 0.01,
-  timeToRemoved: 5000,
+  timeToRemoved: 10000,
   gravity: 0,
   timeScale: 1
 };
