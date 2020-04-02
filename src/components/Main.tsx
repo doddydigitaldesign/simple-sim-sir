@@ -19,85 +19,126 @@ export const Main = () => {
       <div>
         <div className="row">
           <div className="col" />
-          <div className="col text-nowrap">
+          <div className="col">
             <form noValidate autoComplete={"off"}>
-              <div className="form-group">
-                <label htmlFor="popSize">Population Size</label>
-                <input
-                  disabled={running}
-                  id="popSize"
-                  value={popSize}
-                  min={0}
-                  max={5000}
-                  onBlur={e => {
-                    setPopSize(+e.target.value);
-                  }}
-                  type="number"
-                  className={"form-control"}
-                />
+              <div className="form-row align-items-center">
+                <div className="form-group">
+                  <label htmlFor="popSize">
+                    Population Size: {popSize} individuals
+                  </label>
+                  <small id="emailHelp" className="form-text">
+                    Determines the total number of individuals used in the
+                    simulation. Larger numbers affect performance negatively.
+                  </small>
+                  <input
+                    disabled={running}
+                    id="popSize"
+                    value={popSize}
+                    min={0}
+                    step={50}
+                    max={5000}
+                    onChange={e => {
+                      setPopSize(+e.target.value);
+                    }}
+                    type="range"
+                    className={"form-control-range"}
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="initialInfected">Initial Infected</label>
-                <input
-                  disabled={running}
-                  id="initialInfected"
-                  value={initialInfected}
-                  min={0}
-                  max={popSize}
-                  onBlur={e => {
-                    setInitialInfected(+e.target.value);
-                  }}
-                  type="number"
-                  className="form-control"
-                />
+              <div className="form-row align-items-center">
+                <div className="form-group">
+                  <label htmlFor="initialInfected">
+                    Initial Infected: {initialInfected} individuals
+                  </label>
+                  <small id="emailHelp" className="form-text">
+                    Determines the number of infected individuals at the start
+                    of the simulation.
+                  </small>
+                  <input
+                    disabled={running}
+                    id="initialInfected"
+                    value={initialInfected}
+                    min={0}
+                    step={50}
+                    max={popSize}
+                    onChange={e => {
+                      setInitialInfected(+e.target.value);
+                    }}
+                    type="range"
+                    className="form-control-range"
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="timeToRemoved">Infection Time</label>
-                <input
-                  disabled={running}
-                  id="timeToRemoved"
-                  value={timeToRemoved}
-                  min={0}
-                  onBlur={e => {
-                    setTimeToRemoved(+e.target.value);
-                  }}
-                  type="number"
-                  className="form-control"
-                />
+              <div className="form-row align-items-center">
+                <div className="form-group">
+                  <label htmlFor="timeToRemoved">
+                    Infection Time: {Math.floor(timeToRemoved / 1000)}s
+                  </label>
+                  <small id="emailHelp" className="form-text">
+                    Determines the amount of time spent in an "infected" state.
+                  </small>
+                  <input
+                    disabled={running}
+                    id="timeToRemoved"
+                    value={timeToRemoved}
+                    min={0}
+                    step={1000}
+                    max={100000}
+                    onChange={e => {
+                      setTimeToRemoved(+e.target.value);
+                    }}
+                    type="range"
+                    className="form-control-range"
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="transmissionRate">Virulence</label>
-                <input
-                  disabled={running}
-                  id="transmissionRate"
-                  value={transmissionRate}
-                  min={0}
-                  max={1}
-                  step={0.01}
-                  onBlur={e => {
-                    setTransmissionRate(+e.target.value);
+              <div className="form-row align-items-center">
+                <div className="form-group">
+                  <label htmlFor="transmissionRate">
+                    Virulence: {Math.floor(transmissionRate * 100)}%
+                  </label>
+                  <small id="emailHelp" className="form-text">
+                    Determines the probability or spreading the infection via
+                    contact.
+                  </small>
+                  <input
+                    disabled={running}
+                    id="transmissionRate"
+                    value={transmissionRate}
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    onChange={e => {
+                      setTransmissionRate(+e.target.value);
+                    }}
+                    type="range"
+                    className="form-control-range"
+                  />
+                </div>
+              </div>
+              <div className="form-row">
+                <button
+                  disabled={!running}
+                  className="btn btn-danger"
+                  onClick={e => {
+                    e.preventDefault();
+                    setRunning(false);
                   }}
-                  type="range"
-                  className="form-control-range"
-                />
+                >
+                  Stop
+                </button>
+                <button
+                  disabled={running}
+                  className="btn btn-primary"
+                  onClick={e => {
+                    e.preventDefault();
+                    setRunning(true);
+                  }}
+                >
+                  Start
+                </button>
               </div>
             </form>
-            <button
-              className="btn btn-danger"
-              onClick={() => {
-                setRunning(false);
-              }}
-            >
-              Stop
-            </button>
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                setRunning(true);
-              }}
-            >
-              Start
-            </button>
           </div>
           <div className="col" />
         </div>
