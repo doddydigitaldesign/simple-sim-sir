@@ -6,23 +6,13 @@ import { Main } from "./components/Main";
 
 function App() {
   return (
-    <>
+    <div className="App">
       <Header />
-      <div className="App container-fluid bg-dark text-light">
-        <div className="row">
-          <div className="col"></div>
-          <div className="col">
-            <Main />
-          </div>
-          <div className="col"></div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <Footer />
-          </div>
-        </div>
+      <div className="container-fluid bg-dark text-light">
+        <Main />
+        <Footer />
       </div>
-    </>
+    </div>
   );
 }
 

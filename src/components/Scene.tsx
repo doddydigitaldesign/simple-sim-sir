@@ -4,12 +4,12 @@ import { config } from "../config";
 import { RelationTypes } from "../types/relations";
 import { getBallColor } from "../utils/colors";
 import { bernoulliEvent, randBetween } from "../utils/rng";
+import { Table } from "./Table";
 
 // https://codesandbox.io/s/matterjs-4zm7j
 // https://brm.io/matter-js/docs/classes/Events.html
 // https://brm.io/matter-js/demo/#ballPool
 interface Props {
-  setRunning: any;
   populationSize: number;
   timeToRemoved: number;
   transmissionRate: number;
@@ -121,20 +121,6 @@ export class Scene extends React.Component<Props, State> {
       return ballN;
     });
     World.add(engine.world, [...balls]);
-
-    // add mouse control
-    const mouse = Mouse.create(render.canvas),
-      mouseConstraint = MouseConstraint.create(engine, {
-        mouse: mouse,
-        constraint: {
-          stiffness: 1,
-          render: {
-            visible: false
-          }
-        }
-      } as Matter.IMouseConstraintDefinition);
-
-    World.add(engine.world, mouseConstraint);
 
     Events.on(engine, "collisionStart", event => {
       var pairs = event.pairs;
@@ -286,21 +272,13 @@ export class Scene extends React.Component<Props, State> {
     if (this.state.engine) {
       Engine.clear(this.state.engine);
     }
-    if (this.state.I === 0) {
-      this.props.setRunning(false);
-    }
   }
 
   render() {
     return (
       <div className="container-fluid jumbotron bg-dark">
         <div className="row text-center justify-content-center">
-          <p className="lead">
-            Susceptible: {this.state.S} | Infected: {this.state.I} | Removed:{" "}
-            {this.state.R}
-          </p>
-        </div>
-        <div className="row">
+          <Table S={this.state.S} I={this.state.I} R={this.state.R} />
           <div ref={this.customRef} />
         </div>
       </div>

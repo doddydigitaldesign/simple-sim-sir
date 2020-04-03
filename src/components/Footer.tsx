@@ -1,6 +1,6 @@
 import React from "react";
 export const Footer = () => (
-  <footer className="jumbotron bg-dark text-center">
+  <footer className="jumbotron bg-dark text-break text-monospace">
     <div className="container">
       <p>
         Source:{" "}
