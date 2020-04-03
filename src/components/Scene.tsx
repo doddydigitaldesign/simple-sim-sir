@@ -44,9 +44,7 @@ export class Scene extends React.Component<Props, State> {
       Render = Matter.Render,
       World = Matter.World,
       Bodies = Matter.Bodies,
-      Events = Matter.Events,
-      Mouse = Matter.Mouse,
-      MouseConstraint = Matter.MouseConstraint;
+      Events = Matter.Events;
 
     const engine = Engine.create({
       positionIterations: 1,
