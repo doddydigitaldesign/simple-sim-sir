@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "12e08af3d6ba4ba34daa94fdb4e7872c",
+    "revision": "d593394ec67a86cb03537f5f5a3a725e",
     "url": "/simple-sim-sir/index.html"
   },
   {
-    "revision": "b9d9238784cf779ff6ca",
-    "url": "/simple-sim-sir/static/css/main.54a2121e.chunk.css"
+    "revision": "338e783048741fafa92a",
+    "url": "/simple-sim-sir/static/css/main.a49eaacf.chunk.css"
   },
   {
     "revision": "ef9aefec24645b66ce87",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/simple-sim-sir/static/js/2.b9015f3e.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "b9d9238784cf779ff6ca",
-    "url": "/simple-sim-sir/static/js/main.8d9e66b3.chunk.js"
+    "revision": "338e783048741fafa92a",
+    "url": "/simple-sim-sir/static/js/main.aa0e5ae2.chunk.js"
   },
   {
     "revision": "f622b5c905c7c2960354",
