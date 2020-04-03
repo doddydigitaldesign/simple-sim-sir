@@ -11,7 +11,7 @@ export const Table = (props: Props) => {
     <table className="table table-striped table-dark">
       <thead>
         <tr>
-          <th scope="col">#</th>
+          <th scope="col">Population size</th>
           <th scope="col">Susceptible</th>
           <th scope="col">Infected</th>
           <th scope="col">Recovered</th>
@@ -19,7 +19,7 @@ export const Table = (props: Props) => {
       </thead>
       <tbody>
         <tr>
-          <th scope="row">1</th>
+          <th scope="row">{props.S + props.I + props.R}</th>
           <td>{props.S}</td>
           <td>{props.I}</td>
           <td>{props.R}</td>

@@ -61,7 +61,8 @@ export class Scene extends React.Component<Props, State> {
       options: {
         width: config.canvasWidth,
         height: config.canvasHeight,
-        wireframes: false
+        wireframes: false,
+        hasBounds: true
       }
     });
 
