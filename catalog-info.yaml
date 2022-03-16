@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: simple-sim-sir
+  description: Simple SIR simulation
+spec:
+  owner: doddy-digital-design
+  domain: side-projects
